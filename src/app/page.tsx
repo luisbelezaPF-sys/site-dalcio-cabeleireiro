@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight, Phone, Clock, Instagram, Facebook, Star, Menu, X, MessageCircle } from 'lucide-react'
 
 interface GalleryImage {
@@ -20,6 +21,20 @@ export default function DalcioCabeleireiro() {
   })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
+  const router = useRouter()
+
+  // Atalho para acessar painel admin (Ctrl+Shift+A)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+        event.preventDefault()
+        router.push('/admin')
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [router])
 
   // Carregar imagens da galeria do localStorage
   useEffect(() => {
@@ -617,7 +632,12 @@ export default function DalcioCabeleireiro() {
                 25 anos de experiência realçando a beleza natural de cada mulher com carinho e profissionalismo.
               </p>
               <div className="flex space-x-4">
-                <a href="#" className="text-[#FF69B4] hover:text-[#FFD700] transition-colors">
+                <a 
+                  href="https://instagram.com/dalcio_cabeleleiro" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#FF69B4] hover:text-[#FFD700] transition-colors"
+                >
                   <Instagram size={24} />
                 </a>
                 <a href="#" className="text-[#FF69B4] hover:text-[#FFD700] transition-colors">
@@ -663,6 +683,11 @@ export default function DalcioCabeleireiro() {
           </div>
         </div>
       </footer>
+
+      {/* Indicador de Atalho Admin (visível apenas em desenvolvimento) */}
+      <div className="fixed bottom-4 right-4 bg-gray-900/80 text-white px-3 py-2 rounded-lg text-xs opacity-50 hover:opacity-100 transition-opacity">
+        Ctrl+Shift+A: Admin
+      </div>
     </div>
   )
 }
